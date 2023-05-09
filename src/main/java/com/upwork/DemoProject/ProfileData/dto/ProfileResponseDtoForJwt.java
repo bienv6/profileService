@@ -12,9 +12,7 @@ public class ProfileResponseDtoForJwt {
     }
 
     public void setPassword(String password) {
-        byte[] decodedBytes = Base64.getDecoder().decode(password);
-        String decodedString = new String(decodedBytes);
-        this.password = decodedString;
+        this.password = password;
     }
 
     public String getRoles() {

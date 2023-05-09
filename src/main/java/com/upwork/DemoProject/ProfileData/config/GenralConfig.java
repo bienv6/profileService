@@ -6,6 +6,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,5 +28,10 @@ public class GenralConfig {
     @Bean
     public OpenAPI openAPI(){
         return new OpenAPI();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

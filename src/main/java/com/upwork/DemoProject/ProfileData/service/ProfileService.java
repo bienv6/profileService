@@ -8,6 +8,9 @@ import com.upwork.DemoProject.ProfileData.dto.ProfileResponseDtoForJwt;
 import com.upwork.DemoProject.ProfileData.repository.ProfileRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -26,6 +29,11 @@ public class ProfileService {
     @Autowired
     List<ProfileResponseDto> profileResponseDtos;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+
     public ProfileResponseDto createProfile(ProfileRequestDto profileRequestDto) {
 
         Optional<Profile> profileOptional = profileRepository.findByEmail(profileRequestDto.getEmail());
@@ -33,7 +41,7 @@ public class ProfileService {
             throw new RuntimeException("This username already exist please login");
         }
         Profile profile = modelMapper.map(profileRequestDto, Profile.class);
-        String encodedPassword = Base64.getEncoder().encodeToString(profileRequestDto.getAuthRecord().getPassword().getBytes());
+        String encodedPassword = passwordEncoder.encode(profileRequestDto.getAuthRecord().getPassword());
         profile.getAuthRecord().setPassword(encodedPassword);
         profile.getAuthRecord().setUsername(profile.getEmail());
         profile.getAuthRecord().setPersonId(profile);

@@ -76,4 +76,18 @@ public class ProfileService {
         return profileResponseDtoForJwt;
 
     }
+
+    public Boolean isValidatedUser (String userName, String password){
+        ProfileResponseDtoForJwt profile = getPersonByUsername(userName);
+        return profile != null && passwordEncoder.matches(password,profile.getPassword());
+    }
+
+    public ProfileResponseDto signInUser (String userName, String password){
+        Profile profile = null;
+       if (isValidatedUser(userName,password)){
+           profile = profileRepository.findByEmail(userName).get();
+       }
+        return modelMapper.map(profile,ProfileResponseDto.class);
+    }
+
 }
